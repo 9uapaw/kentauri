@@ -40,8 +40,13 @@ impl Chunk {
 
     }
 
+    pub fn write_const(&mut self, value: Value) {
+        let i = self.add_const(value);
+        self.write_byte(i as u8, 0);
+    }
+
     pub fn add_const(&mut self, value: Value) -> usize {
-        let pos = if self.const_pool.values.is_empty() {0} else {self.const_pool.values.len() - 1};
+        let pos = if self.const_pool.values.is_empty() {0} else {self.const_pool.values.len()};
 
         self.const_pool.values.push(value);
 

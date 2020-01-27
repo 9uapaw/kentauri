@@ -1,6 +1,13 @@
+use num_enum::TryFromPrimitive;
+
 #[repr(u8)]
-#[derive(Debug)]
+#[derive(Debug, TryFromPrimitive)]
 pub enum OpCode {
-    OP_RETURN = 1,
-    OP_CONST = 2
+    OP_RETURN,
+    OP_CONST,
+    OP_NEGATE,
+    OP_ADD,
+    OP_SUB,
+    OP_MUL,
+    OP_DIV
 }
