@@ -5,5 +5,5 @@ macro_rules! debug {
 
 #[cfg(not(debug_assertions))]
 macro_rules! debug {
-    ($( $args:expr ),*) => {}
+    ($( $args:expr ),*) => {};
 }

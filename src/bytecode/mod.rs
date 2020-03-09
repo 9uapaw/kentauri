@@ -1,3 +1,3 @@
 pub mod chunk;
-pub mod opcode;
 pub mod instruction;
+pub mod opcode;

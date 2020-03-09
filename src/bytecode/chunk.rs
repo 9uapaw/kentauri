@@ -1,7 +1,5 @@
 use crate::bytecode::opcode::OpCode;
-use crate::value::value::{ValuePool, Value};
-use crate::bytecode::instruction::Instruction;
-
+use crate::value::value::{Value, ValuePool};
 
 pub struct Chunk {
     pub code: Vec<u8>,
@@ -10,14 +8,16 @@ pub struct Chunk {
 }
 
 impl Chunk {
-
     pub fn new() -> Self {
-        Chunk{code: Vec::new(), const_pool: ValuePool::new(), line_code_index: Vec::new()}
+        Chunk {
+            code: Vec::new(),
+            const_pool: ValuePool::new(),
+            line_code_index: Vec::new(),
+        }
     }
 
     pub fn write_code(&mut self, code: OpCode, line: usize) {
         self.write_byte(code as u8, line);
-
     }
 
     pub fn write_byte(&mut self, byte: u8, line: usize) {
@@ -37,7 +37,6 @@ impl Chunk {
         } else {
             self.line_code_index[line] += 1;
         }
-
     }
 
     pub fn write_const(&mut self, value: Value) {
@@ -46,7 +45,11 @@ impl Chunk {
     }
 
     pub fn add_const(&mut self, value: Value) -> usize {
-        let pos = if self.const_pool.values.is_empty() {0} else {self.const_pool.values.len()};
+        let pos = if self.const_pool.values.is_empty() {
+            0
+        } else {
+            self.const_pool.values.len()
+        };
 
         self.const_pool.values.push(value);
 
@@ -67,5 +70,21 @@ impl Chunk {
         }
 
         line
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Chunk;
+    use crate::bytecode::opcode::OpCode;
+
+    #[test]
+    fn test_line_resolution() {
+        let mut chunk = Chunk::new();
+        chunk.write_code(OpCode::OP_NEGATE, 0);
+        chunk.write_code(OpCode::OP_DIV, 3);
+
+        assert_eq!(0, chunk.get_code_line(0));
+        assert_eq!(3, chunk.get_code_line(1));
     }
 }
